@@ -1,14 +1,29 @@
 #requires -module posh-git, PSColor
 
-# Load Git and Coloured folder support
-#Import-Module -Name posh-git
-#Import-Module -Name PSColor
-
 # SSH Agent handles keys for apps like VSCode
-Start-SshAgent #-Quiet
+$privateSshKeyPath = "$env:USERPROFILE\.ssh\id_rsa"
 
-# Load Private SSH key
-Add-SshKey $env:USERPROFILE\.ssh\id_rsa
+if (Test-Path -Path $privateSshKeyPath) {
+    Write-Verbose "Private SSH key exists [$privateSshKeyPath]"
+
+    if (Get-Process -Name 'ssh-agent' -ErrorAction 'SilentlyContinue') {
+        Write-Verbose 'ssh-agent process already exists'
+    }
+    else {
+        Write-Verbose 'Starting ssh-agent process'
+        Start-SshAgent -Quiet
+    }
+
+    # Load Private SSH key
+    if ($(ssh-add -l) -match 'The agent has no identities') {
+        Write-Verbose "The SSH agent has no identities, loading key from [$privateSshKeyPath]"
+        Add-SshKey $env:USERPROFILE\.ssh\id_rsa -Quiet
+    }
+    else {
+        Write-Verbose 'The SSH agent has identities'
+    }
+}
+
 
 # Am I running as Administrator?
 function Test-Administrator {
@@ -28,9 +43,10 @@ function prompt {
         Write-Host "(Admin) : " -NoNewline -ForegroundColor DarkGray
     }
 
-    #Write-Host "$ENV:USERNAME@" -NoNewline -ForegroundColor DarkYellow
-    #Write-Host "$ENV:COMPUTERNAME" -NoNewline -ForegroundColor Magenta
-
+    Write-Host "$ENV:USERNAME@" -NoNewline -ForegroundColor DarkYellow
+    Write-Host "$ENV:COMPUTERNAME" -NoNewline -ForegroundColor Magenta
+    Write-Host " : " -NoNewline -ForegroundColor DarkGray
+    
     if ($s -ne $null) {  # color for PSSessions
         Write-Host " (`$s: " -NoNewline -ForegroundColor DarkGray
         Write-Host "$($s.Name)" -NoNewline -ForegroundColor Yellow
@@ -51,3 +67,4 @@ function prompt {
 
     return "> "
 }
+

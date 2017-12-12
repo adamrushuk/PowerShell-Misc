@@ -1,0 +1,1 @@
+c:\windows\System32\sysprep\sysprep.exe /generalize /reboot /oobe

@@ -17,7 +17,7 @@ if (Test-Path -Path $privateSshKeyPath) {
     # Load Private SSH key
     if ($(ssh-add -l) -match 'The agent has no identities') {
         Write-Verbose "The SSH agent has no identities, loading key from [$privateSshKeyPath]"
-        Add-SshKey $env:USERPROFILE\.ssh\id_rsa -Quiet
+        Add-SshKey $privateSshKeyPath -Quiet
     }
     else {
         Write-Verbose 'The SSH agent has identities'

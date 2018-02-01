@@ -36,25 +36,24 @@ function prompt {
 
     Write-Host
 
-    # Reset color, which can be messed up by Enable-GitColors
-    $Host.UI.RawUI.ForegroundColor = $GitPromptSettings.DefaultForegroundColor
-
-    if (Test-Administrator) {  # Use different username if elevated
+    if (Test-Administrator) {
+        # Use different username if elevated
         Write-Host "(Admin) : " -NoNewline -ForegroundColor DarkGray
     }
 
     Write-Host "$ENV:USERNAME@" -NoNewline -ForegroundColor DarkYellow
     Write-Host "$ENV:COMPUTERNAME" -NoNewline -ForegroundColor Magenta
     Write-Host " : " -NoNewline -ForegroundColor DarkGray
-    
-    if ($s -ne $null) {  # color for PSSessions
+
+    if ($s -ne $null) {
+        # color for PSSessions
         Write-Host " (`$s: " -NoNewline -ForegroundColor DarkGray
         Write-Host "$($s.Name)" -NoNewline -ForegroundColor Yellow
         Write-Host ") " -NoNewline -ForegroundColor DarkGray
         Write-Host " : " -NoNewline -ForegroundColor DarkGray
     }
 
-    Write-Host $($(Get-Location) -replace ($env:USERPROFILE).Replace('\','\\'), "~") -NoNewline -ForegroundColor Blue
+    Write-Host $($(Get-Location) -replace ($env:USERPROFILE).Replace('\', '\\'), "~") -NoNewline -ForegroundColor Blue
     Write-Host " : " -NoNewline -ForegroundColor DarkGray
     Write-Host (Get-Date -Format G) -NoNewline -ForegroundColor DarkMagenta
     Write-Host " : " -NoNewline -ForegroundColor DarkGray
@@ -67,4 +66,3 @@ function prompt {
 
     return "> "
 }
-

@@ -10,7 +10,7 @@
 #     └────ResourceDesignerTests.ps1
 
 # Test all DSC resources - folders containing their .psm1
-$dscResourcePaths = Get-ChildItem -Path '../' | Where-Object Name -ne 'Tests'
+$dscResourcePaths = Get-ChildItem -Path "$PSScriptRoot/../" | Where-Object Name -ne 'Tests'
 
 foreach ($dscResourcePath in $dscResourcePaths) {
     Write-Host "`nRunning Test-xDscResource on $($dscResourcePath.FullName)" -ForegroundColor 'Yellow'

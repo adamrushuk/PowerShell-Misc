@@ -1,4 +1,5 @@
 # Use dynamic tests below to validate your DSC resources and their schema files
+# Requires the xDSCResourceDesigner PowerShell module
 # Source: https://docs.microsoft.com/en-us/powershell/dsc/resourceauthoringchecklist
 #
 # This file should be placed in a folder called "Tests", which itself is within the DSCResources folder. eg:

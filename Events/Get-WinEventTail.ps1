@@ -1,5 +1,5 @@
 # Source: https://gist.github.com/jeffpatton1971/a908cac57489e6ca59a6
-# Modified for remote support
+# Modified by Adam Rush to support remote event collection
 Function Get-WinEventTail {
     <#
         .SYNOPSIS

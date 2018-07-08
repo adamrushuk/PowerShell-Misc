@@ -199,6 +199,7 @@ function Disable-ExceptionDebugger
 #endregion Debug
 
 
+# Source: https://gist.github.com/GABeech/98df2f95fb3a79cd2ccaa80a439aa975
 function Clear-DeletedBranches
 {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]

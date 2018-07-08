@@ -6,7 +6,7 @@
 
 # Vars
 $localPSRepositoryName = 'LocalPSRepository'
-$moduleNames = @('xDscDiagnostics', 'xDSCResourceDesigner')
+$moduleNames = @('xActiveDirectory')
 
 # Show currently installed module versions
 $moduleNames | ForEach-Object { Get-Module -Name $_ -ListAvailable }

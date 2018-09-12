@@ -5,9 +5,9 @@ function Verb-Noun {
     .DESCRIPTION
         Detailed description
     .PARAMETER Name
-        Specifies the name of a thing
-    .PARAMETER OptionalParam
-        Specifies the name of an optional thing
+        Specifies the name of a thing. Supports providing an array of names.
+    .PARAMETER OptionalSwitch
+        Enables an optional action
     .INPUTS
         System.String
     .OUTPUTS
@@ -38,9 +38,8 @@ function Verb-Noun {
         $Name,
 
         [Parameter(Mandatory = $false)]
-        [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
-        $OptionalParam
+        [Switch]
+        $OptionalSwitch
     )
 
     begin {
@@ -55,7 +54,7 @@ function Verb-Noun {
             Write-Verbose -Message "STARTED: $taskMessage..."
 
             try {
-                if ($PSBoundParameters.ContainsKey('OptionalParam')){
+                if ($PSBoundParameters.ContainsKey('OptionalSwitch')){
                     # Do optional task
                 }
 

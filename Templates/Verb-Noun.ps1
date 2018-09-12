@@ -1,39 +1,30 @@
 function Verb-Noun {
     <#
-        .SYNOPSIS
+    .SYNOPSIS
         Summary
-
-        .DESCRIPTION
+    .DESCRIPTION
         Detailed description
-
-        .PARAMETER Name
+    .PARAMETER Name
         Specifies the name of a thing
-
-        .PARAMETER OptionalParam
+    .PARAMETER OptionalParam
         Specifies the name of an optional thing
-
-        .INPUTS
+    .INPUTS
         System.String
-
-        .OUTPUTS
+    .OUTPUTS
         System.Management.Automation.PSCustomObject
-
-        .EXAMPLE
+    .EXAMPLE
         Verb-Noun
 
         Returns all things.
-
-        .EXAMPLE
+    .EXAMPLE
         Verb-Noun -Name 'Thing01'
 
         Returns a single thing.
-
-        .EXAMPLE
+    .EXAMPLE
         Verb-Noun -Name 'Thing01', 'Thing02'
 
         Returns multiple things.
-
-        .NOTES
+    .NOTES
         Author: Adam Rush
         GitHub: adamrushuk
         Twitter: @adamrushuk
@@ -52,36 +43,49 @@ function Verb-Noun {
         $OptionalParam
     )
 
-    Begin {}
+    begin {
+        # Do tasks like opening a DB connection
+    }
 
-    Process {
+    process {
 
-        try {
+        #region TaskSummary
+        foreach ($item in $Name) {
+            $taskMessage = "TaskMessageDescription: [$item]"
+            Write-Verbose -Message "STARTED: $taskMessage..."
 
-            if ($PSBoundParameters.ContainsKey('OptionalParam')){
-                # Do something
-            }
+            try {
+                if ($PSBoundParameters.ContainsKey('OptionalParam')){
+                    # Do optional task
+                }
 
-            foreach ($Item in $Collection) {
-
-                # Do something
-                $Object = $Item | Get-Stuff
+                # Get something
+                $object = $item | Get-Something -ErrorAction 'Stop'
 
                 # Output to pipeline
                 [PSCustomObject]@{
-                    Name          = $Object.Name
-                    Id            = $Object.Id
+                    Name          = $object.Name
+                    Id            = $object.Id
                 }
-
+            }
+            catch {
+                Write-Error -Message "ERROR: $taskMessage." -ErrorAction 'Continue'
+                throw $_
             }
 
-        }
-        catch [exception] {
+            # Check for incorrect status
+            if ($object.status -eq 'failed') {
+                throw "ERROR: Status of [$item] is: [failed]"
+            }
 
-            throw $_
-
+            Write-Verbose -Message "FINISHED: $taskMessage."
         }
+        #endregion TaskSummary
 
     } # End process
+
+    end {
+        # Do tasks like closing a DB connection
+    }
 
 } # End function

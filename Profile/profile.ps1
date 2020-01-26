@@ -1,123 +1,35 @@
-#requires -module posh-git
+#requires -module posh-git, oh-my-posh
+Set-Theme Paradox
+
+<# Custom prompt config
+# Install modules
+Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force -Verbose
+Install-Module -Name oh-my-posh -Scope CurrentUser -Verbose
+Install-Module -Name PSReadLine -Scope CurrentUser -AllowPrerelease -Force -SkipPublisherCheck -Verbose
+Get-Module -Name posh-git, oh-my-posh, PSReadLine, EditorServicesCommandSuite -ListAvailable
+
+# Download "Delugia.Nerd.Font.Complete.ttf" from:
+https://github.com/adam7/delugia-code/releases?WT.mc_id=-blog-scottha
+
+# Change font settings in VSCode (only for terminal, as rendering issues for backticks)
+"editor.fontFamily": "'Consolas', 'Fira Code', 'Courier New', monospace",
+"editor.fontLigatures": false,
+"terminal.integrated.fontFamily": "'Delugia Nerd Font', 'Consolas', 'Fira Code', 'Courier New', monospace"
+
+Blog post: https://www.hanselman.com/blog/HowToMakeAPrettyPromptInWindowsTerminalWithPowerlineNerdFontsCascadiaCodeWSLAndOhmyposh.aspx
+#>
+
 
 $profileLoadStart = Get-Date
 
-# Am I running as Administrator?
-function Test-Administrator {
-    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-}
-
-#region Prompt
-<# function prompt {
-    $realLASTEXITCODE = $LASTEXITCODE
-
-    Write-Host
-
-    if (Test-Administrator) {
-        # Use different username if elevated
-        Write-Host "(Admin) : " -NoNewline -ForegroundColor DarkGray
-    }
-
-    Write-Host "$ENV:USERNAME@" -NoNewline -ForegroundColor DarkYellow
-    Write-Host "$ENV:COMPUTERNAME" -NoNewline -ForegroundColor Magenta
-    Write-Host " : " -NoNewline -ForegroundColor DarkGray
-
-    if ($null -ne $s) {
-        # color for PSSessions
-        Write-Host " (`$s: " -NoNewline -ForegroundColor DarkGray
-        Write-Host "$($s.Name)" -NoNewline -ForegroundColor Yellow
-        Write-Host ") " -NoNewline -ForegroundColor DarkGray
-        Write-Host " : " -NoNewline -ForegroundColor DarkGray
-    }
-
-    Write-Host $($(Get-Location) -replace ($env:USERPROFILE).Replace('\', '\\'), "~") -NoNewline -ForegroundColor Blue
-    Write-Host " : " -NoNewline -ForegroundColor DarkGray
-    Write-Host (Get-Date -Format G) -NoNewline -ForegroundColor DarkMagenta
-    Write-Host " : " -NoNewline -ForegroundColor DarkGray
-
-    $global:LASTEXITCODE = $realLASTEXITCODE
-
-    Write-VcsStatus
-
-    Write-Host ""
-
-    return "> "
-} #>
-#endregion Prompt
-
-
-#region Aliases
-function Get-VagrantStatus {
-    & vagrant.exe status
-}
-Set-Alias -Name 'vs' -Value 'Get-VagrantStatus'
-
-function Get-VagrantGlobalStatus {
-    & vagrant.exe global-status
-}
-Set-Alias -Name 'vgs' -Value 'Get-VagrantGlobalStatus'
-
-function Get-VagrantGlobalStatusPrune {
-    & vagrant.exe global-status --prune
-}
-Set-Alias -Name 'vgsp' -Value 'Get-VagrantGlobalStatusPrune'
-
-function Invoke-VagrantUp {
-    & vagrant.exe up
-}
-Set-Alias -Name 'vup' -Value 'Invoke-VagrantUp'
-
-function Invoke-VagrantUpLog {
-    & vagrant.exe up 2>&1 | Tee-Object -FilePath 'vagrant.log'
-}
-Set-Alias -Name 'vupl' -Value 'Invoke-VagrantUpLog'
-
-function Invoke-VagrantHalt {
-    & vagrant.exe halt
-}
-Set-Alias -Name 'vh' -Value 'Invoke-VagrantHalt'
-
-function Invoke-VagrantDestroy {
-    & vagrant.exe destroy
-}
-Set-Alias -Name 'vd' -Value 'Invoke-VagrantDestroy'
-
-
-function Invoke-VagrantSnapshotList {
-    & vagrant.exe snapshot list
-}
-Set-Alias -Name 'vsl' -Value 'Invoke-VagrantSnapshotList'
-
-function Invoke-VagrantSnapshotRestoreNP {
-    param (
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullorEmpty()]
-        $Name
-    )
-    & vagrant.exe snapshot restore $Name --no-provision
-}
-Set-Alias -Name 'vsr' -Value 'Invoke-VagrantSnapshotRestoreNP'
-
-function Invoke-VagrantSnapshotSave {
-    param (
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullorEmpty()]
-        $Name
-    )
-    & vagrant.exe snapshot save $Name -f
-}
-Set-Alias -Name 'vss' -Value 'Invoke-VagrantSnapshotSave'
-#endregion Aliases
-
-
 # Custom VSCode functions
 # Import useful functions like splatting: https://sqldbawithabeard.com/2018/03/11/easily-splatting-powershell-with-vs-code/
+# Install-Module -Name EditorServicesCommandSuite -Scope CurrentUser -Verbose
 if ($Host.Name -match 'Visual Studio') {
     if (-not (Get-Module -Name "EditorServicesCommandSuite" -ListAvailable)) {
         Import-Module EditorServicesCommandSuite -ErrorAction Ignore
     }
-    Import-EditorCommand -Module EditorServicesCommandSuite -Verbose
+    Import-EditorCommand -Module EditorServicesCommandSuite
 }
 
 
@@ -148,6 +60,9 @@ function Clear-DeletedBranches {
         [string]
         $GitDir = $PWD
     )
+
+    Write-Host "Switching to master branch..." -ForegroundColor Yellow
+    git.exe checkout master
 
     $before = git.exe branch -a
 

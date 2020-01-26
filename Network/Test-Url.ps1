@@ -15,5 +15,5 @@ function Test-Url {
     Invoke-RestMethod -Uri $callUrl #| Select-Object -Property Host, IsItDown, Response_Code
 }
 
-$response = Test-Url -Url thehypepipe.co.uk
+$response = Test-Url -Url "thehypepipe.co.uk"
 $response

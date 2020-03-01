@@ -11,6 +11,7 @@ if (-not $outputJson) {
     Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
     throw $_
 } else {
+    $outputJson
     Write-Verbose "FINISHED: $taskMessage."
 }
 #endregion

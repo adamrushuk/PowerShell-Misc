@@ -3,19 +3,22 @@
     Deletes Azure Resource Groups with a given prefix
 .DESCRIPTION
     Deletes Azure Resource Groups with a given prefix, with confirmation prompt and WhatIf functionality
-.PARAMETER Prefix
-    The prefix string that matches the start of the Resource Group name
-    # "a6wx6" would match resource group called "a6wx6-rg-blahblah"
+.PARAMETER Prefixes
+    An array of prefix strings that matches the start of the Resource Group name
+    # "abc99", "abc12" would match resource group called "abc99-rg-blahblah" and "abc12-rg-blahblah"
+.PARAMETER MaxLimit
+    Aborts script if too many Resource Groups are found.
+    This is a safety check
 .PARAMETER WhatIf
     Does a dry-run and shows what Resource Groups would be deleted
 .EXAMPLE
-    ./Delete-ResourceGroups.ps1 -Prefix a6wx6
+    ./Delete-ResourceGroups.ps1 -Prefixes abc99
 
-    Deletes all Resource Groups starting with "a6wx6", eg:
-    "a6wx6-rg-one"
-    "a6wx6-rg-two"
+    Deletes all Resource Groups starting with "abc99", eg:
+    "abc99-rg-one"
+    "abc99-rg-two"
 .EXAMPLE
-    ./Delete-ResourceGroups.ps1 -Prefix a6wx6 -WhatIf
+    ./Delete-ResourceGroups.ps1 -Prefixes abc99 -WhatIf
 
     Shows what Resource Groups would be deleted
 .NOTES
@@ -27,50 +30,77 @@
 param (
     [Parameter(Mandatory)]
     [ValidateNotNull()]
-    [string]
-    $Prefix,
+    [string[]]
+    $Prefixes,
+
+    [int]
+    $MaxLimit = 5,
 
     [switch]
     $WhatIf
 )
 
-$resourceGroups = Get-AzResourceGroup -Name "$prefix*"
-Write-Output "Resource groups found: [$($resourceGroups.Count)]"
+Write-Output "Searching for Resource groups starting with [$($Prefixes -join ', ')]"
 
-# abort if we find no resource groups
-if ($resourceGroups.Count -eq 0) {
-    Write-Output "Aborting"
-    return
-}
+# init
+$resourceGroupsToDelete = $null
+$jobs = $null
 
-# show resource groups
-$resourceGroups | Select-Object -ExpandProperty "ResourceGroupName"
-Write-Output ""
+foreach ($Prefix in $Prefixes) {
 
-# confirm deletion
-$confirmation = $null
-while($confirmation -ne "y") {
-    if ($confirmation -eq 'n') {
-        Write-Output "Aborting"
+    $resourceGroups = $null
+    $resourceGroups = Get-AzResourceGroup -Name "$Prefix*"
+    Write-Host "`nResource groups found starting with [$Prefix]: [$($resourceGroups.Count)]" -ForegroundColor Yellow
+
+    # abort if we find no resource groups
+    if ($resourceGroups.Count -eq 0) {
+        Write-Host "Continuing...`n" -ForegroundColor Green
+        continue
+    }
+
+    # safety check
+    if ($resourceGroups.Count -gt $MaxLimit) {
+        Write-Host "ABORTING, MaxLimit was hit. Over [$MaxLimit] resource groups were found." -ForegroundColor Red
         return
     }
-    $confirmation = Read-Host "Are you Sure You Want To Delete [$($resourceGroups.Count)] Resource Groups? [y/n]"
+
+
+    # show resource groups
+    $resourceGroups | Select-Object -ExpandProperty "ResourceGroupName"
+    Write-Output ""
+
+    # confirm deletion
+    $confirmation = $null
+    while($confirmation -ne "y") {
+        if ($confirmation -eq 'n') { break }
+
+        $confirmation = Read-Host "Are you sure you want to select these [$($resourceGroups.Count)] Resource Groups for deletion? [y/n]"
+    }
+
+    # queue
+    if ($confirmation -eq "y") {
+        Write-Output "Queuing [$($resourceGroups.Count)] Resource Groups..."
+        $resourceGroupsToDelete += $resourceGroups
+    } else {
+        Write-Host "Skipping...`n" -ForegroundColor Yellow
+    }
 }
 
 # delete
-if ($confirmation -eq "y") {
-    Write-Output "Deleting [$($resourceGroups.Count)] Resource Groups..."
-
+if ($resourceGroupsToDelete.Count -gt 0) {
+    Write-Output "Deleting [$($resourceGroupsToDelete.Count)] Resource Groups..."
     if ($WhatIf.IsPresent) {
-        $resourceGroups | Remove-AzResourceGroup -Force -WhatIf
+        $resourceGroupsToDelete | Remove-AzResourceGroup -Force -WhatIf
     } else {
-        $jobs = $resourceGroups | Remove-AzResourceGroup -Force -AsJob
-        $jobs
-
-        Write-Output "Waiting for jobs to finish..."
-        $jobs | Wait-Job
-        $jobs | Receive-Job -Keep
+        $jobs += $resourceGroupsToDelete | Remove-AzResourceGroup -Force -AsJob
     }
-} else {
-    Write-Output "Aborting"
+}
+
+# wait for jobs to complete
+if ($null -ne $jobs) {
+    $jobs
+
+    Write-Output "`nWaiting for [$($jobs.Count)] jobs to finish..."
+    $jobs | Wait-Job
+    $jobs | Receive-Job -Keep
 }

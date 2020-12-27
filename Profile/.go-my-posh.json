@@ -1,0 +1,128 @@
+{
+    "final_space": false,
+    "console_title": false,
+    "console_title_style": "",
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "horizontal_offset": 0,
+            "vertical_offset": 0,
+            "segments": [
+                {
+                    "type": "root",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#100e23",
+                    "background": "#ffe9aa",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": null
+                },
+                {
+                    "type": "session",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#100e23",
+                    "background": "#ffffff",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": null
+                },
+                {
+                    "type": "path",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#100e23",
+                    "background": "#91ddff",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "folder_icon": "",
+                        "folder_separator_icon": "",
+                        "style": "short"
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#193549",
+                    "background": "#95ffa4",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": null
+                },
+                {
+                    "type": "az",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#000000",
+                    "background": "#9ec3f0",
+                    "properties": {
+                        "display_id": false,
+                        "display_name": true,
+                        "info_separator": " @ ",
+                        "prefix": " \uFD03 "
+                    }
+                },
+                {
+                    "type": "kubectl",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#000000",
+                    "background": "#ebcc34",
+                    "properties": {
+                        "prefix": " \uFD31 "
+                    }
+                },
+                {
+                    "type": "exit",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#ffffff",
+                    "background": "#ff8080",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "prefix": " "
+                    }
+                }
+            ]
+        },
+        {
+            "type": "newline",
+            "alignment": "",
+            "horizontal_offset": 0,
+            "vertical_offset": 0,
+            "segments": null
+        },
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "horizontal_offset": 0,
+            "vertical_offset": 0,
+            "segments": [
+                {
+                    "type": "text",
+                    "style": "plain",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#007ACC",
+                    "background": "",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "prefix": "",
+                        "text": "❯"
+                    }
+                }
+            ]
+        }
+    ]
+}

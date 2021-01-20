@@ -11,7 +11,7 @@ Install-Module -Name oh-my-posh -Scope CurrentUser -AllowPrerelease -Verbose
 Install-Module -Name PSReadLine -Scope CurrentUser -AllowPrerelease -Force -SkipPublisherCheck -Verbose
 Get-Module -Name posh-git, oh-my-posh, PSReadLine -ListAvailable
 
-# Download "Caskaydia Cove Nerd Font" from:
+# Download "Caskaydia Cove Nerd Font" (search for "CascadiaCode") from:
 https://www.nerdfonts.com/font-downloads
 
 # Change font settings in VSCode (only for terminal, as rendering issues for backticks)

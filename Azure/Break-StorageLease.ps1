@@ -6,8 +6,9 @@ $storageAccountKey = "MY_STORAGE_ACCOUNT_KEY"
 $storageContainerName = "terraformstate"
 
 # login
-Connect-AzAccount -UseDeviceAuthentication
-Set-AzContext -Subscription "JFC-ISS-ASDT_Azure-Publishing_iacemodgovuk_Prod"
+. ~/.azmgt.ps1
+# Connect-AzAccount -UseDeviceAuthentication
+# Set-AzContext -Subscription "<SUBSCRIPTION_NAME>"
 
 # get blobs
 $ctx = New-AzStorageContext -StorageAccountName $storageAccountName -StorageAccountKey $storageAccountKey
@@ -41,8 +42,8 @@ foreach ($blob in $blobsToBreakLease) {
     # try { $blob.ICloudBlob.BreakLease() } catch {}
     $blob.ICloudBlob.BreakLease()
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Error code [$LASTEXITCODE] occurred for [$($blob.Name)] `n"
+        Write-Error "Exit code [$LASTEXITCODE] occurred for [$($blob.Name)] `n"
     } else {
-        Write-Host "Error code [$LASTEXITCODE] Successfully broke lease for [$($blob.Name)].`n"
+        Write-Host "Exit code [$LASTEXITCODE] Successfully broke lease for [$($blob.Name)].`n"
     }
 }

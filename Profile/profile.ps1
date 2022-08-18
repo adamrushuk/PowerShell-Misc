@@ -1,5 +1,7 @@
 #requires -module posh-git, oh-my-posh
 
+# common path: C:\Users\<USERNAME>\Documents\PowerShell\profile.ps1
+
 #region Custom prompt config
 <#
 # Install modules

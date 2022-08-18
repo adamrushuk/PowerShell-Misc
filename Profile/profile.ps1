@@ -93,3 +93,7 @@ function Clear-DeletedBranches {
     Write-Host "`nCurrent branches..." -ForegroundColor Green
     git branch -a
 }
+
+# Aliases
+Set-Alias -Name k -Value kubectl
+Set-Alias -Name tf -Value terraform

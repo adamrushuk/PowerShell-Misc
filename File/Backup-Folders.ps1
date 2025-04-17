@@ -13,7 +13,7 @@ Write-Host "Backing up [~/code] folder..."
 robocopy "$env:HOMEPATH\code" "D:\Backups\code\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
 
 Write-Host "Backing up [~/OneDrive] folder..."
-robocopy "$env:HOMEPATH\OneDrive" "D:\Backups\OneDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
+robocopy "$env:OneDrive" "D:\Backups\OneDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
 
 Write-Host "Backing up [~/Google Drive] folder..."
 robocopy "$env:HOMEPATH\Google Drive" "D:\Backups\GoogleDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"

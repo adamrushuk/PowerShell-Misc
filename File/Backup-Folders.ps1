@@ -16,6 +16,6 @@ Write-Host "Backing up [~/OneDrive] folder..."
 robocopy "$env:OneDrive" "D:\Backups\OneDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
 
 Write-Host "Backing up [~/Google Drive] folder..."
-robocopy "$env:HOMEPATH\Google Drive" "D:\Backups\GoogleDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
+robocopy "$env:HOMEPATH\My Drive" "D:\Backups\GoogleDrive\$dateString" /E /Z /ZB /R:5 /W:5 /TBD /NP /MT:16 /njh /ndl /nc /ns /nfl /xd ".git"
 
 Write-Host "All backup jobs have now completed."

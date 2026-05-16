@@ -4,7 +4,7 @@
 # robocopy \\10.1.2.111\Users\admin\Documents C:\Users\admin\Documents /E /Z /ZB /R:5 /W:5 /TBD /NP /V /MT:16
 
 # Vars
-$backupDrive = "E:"
+$backupDrive = "D:"
 
 # Create dated folder and copy, excluding ".git" folders
 # No logging, except a final summary: /njh /ndl /nc /ns /nfl

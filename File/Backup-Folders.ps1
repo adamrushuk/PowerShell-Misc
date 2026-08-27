@@ -14,6 +14,7 @@ $excludedDirs = @(".git", "node_modules", ".venv", ".terraform", "bin", "obj")
 
 Read-Host -Prompt "Has a USB drive been connected and showing as Drive [$backupDrive]?"
 $dateString = Get-Date -Format "yyyy-MM-dd"
+$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 Write-Host "Backing up [~/code] folder..."
 robocopy "$env:HOMEPATH\code" "$backupDrive\Backups\code\$dateString" /E /R:1 /W:1 /TBD /NP /MT:1 /njh /ndl /nc /ns /nfl /xd $excludedDirs
@@ -24,4 +25,5 @@ robocopy "$env:OneDrive" "$backupDrive\Backups\OneDrive\$dateString" /E /R:1 /W:
 Write-Host "Backing up [~/Google Drive] folder..."
 robocopy "$env:HOMEPATH\My Drive" "$backupDrive\Backups\GoogleDrive\$dateString" /E /R:1 /W:1 /TBD /NP /MT:1 /njh /ndl /nc /ns /nfl /xd $excludedDirs
 
-Write-Host "All backup jobs have now completed."
+$stopwatch.Stop()
+Write-Host "All backup jobs have now completed in $($stopwatch.Elapsed.ToString('hh\h\ mm\m\ ss\s'))."

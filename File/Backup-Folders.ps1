@@ -8,6 +8,8 @@
 #   no /Z /ZB - restartable mode writes tracking records per buffer chunk, huge overhead on many small files
 # No logging, except a final summary: /njh /ndl /nc /ns /nfl
 
+# NOTE: last run took about 22mins
+
 # Vars
 $backupDrive = "D:"
 $excludedDirs = @(".git", "node_modules", ".venv", ".terraform", "bin", "obj")
